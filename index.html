@@ -1,29 +1,247 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>وصال — جسر التواصل الفوري للصم وضعاف السمع</title>
-    <meta
-      name="description"
-      content="منصة تواصل ثنائية الاتجاه تحوّل الكلام المنطوق إلى نص فوري واضح لذوي الإعاقة السمعية، وتتيح لهم الكتابة والعرض بخط كبير أو النطق الصوتي ليتواصل الجميع بسهولة."
-    />
-    <meta property="og:title" content="وصال — جسر التواصل الفوري للصم وضعاف السمع" />
-    <meta
-      property="og:description"
-      content="منصة تواصل ثنائية الاتجاه تحوّل الكلام المنطوق إلى نص فوري واضح لذوي الإعاقة السمعية، وتتيح لهم الكتابة والعرض بخط كبير أو النطق الصوتي ليتواصل الجميع بسهولة."
-    />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="antialiased selection:bg-blue-600 selection:text-white">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>وصال — جسر التواصل الفوري للصم وضعاف السمع</title>
+<meta name="description" content="منصة تواصل ثنائية الاتجاه تحوّل الكلام المنطوق إلى نص فوري واضح لذوي الإعاقة السمعية، وتتيح لهم الكتابة والعرض بخط كبير أو النطق الصوتي.">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--mut:#64748b;--pri:#2563eb;--prit:#fff;--bd:#dbe2ee;--dang:#dc2626;--fs:1}
+[data-theme=dark]{--bg:#0b1220;--card:#131c2e;--text:#e8eefc;--mut:#94a3b8;--pri:#60a5fa;--prit:#0b1220;--bd:#26334d;--dang:#f87171}
+[data-theme=contrast]{--bg:#000;--card:#000;--text:#ffeb3b;--mut:#fff;--pri:#ffeb3b;--prit:#000;--bd:#fff;--dang:#ff6b6b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;line-height:1.7}
+h1,h2{font-family:Cairo,"IBM Plex Sans Arabic",Tahoma,sans-serif;margin:0}
+header{padding:14px 20px;border-bottom:1px solid var(--bd);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+header h1{font-size:1.4rem}header p{margin:0;color:var(--mut);font-size:.85rem}
+main{max-width:1200px;margin:0 auto;padding:16px;display:grid;gap:16px}
+@media(min-width:900px){main{grid-template-columns:7fr 5fr;align-items:start}.full{grid-column:1/-1}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,select,textarea{font:inherit;color:var(--text)}
+button,select{min-height:44px;padding:6px 14px;border-radius:12px;border:1px solid var(--bd);background:var(--card);cursor:pointer}
+button:hover{border-color:var(--pri)}
+button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.pri{background:var(--pri);color:var(--prit);border-color:var(--pri);font-weight:600}
+.dang{color:var(--dang);border-color:var(--dang)}
+.live{background:var(--dang);color:#fff;border-color:var(--dang)}
+#stage{min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:Cairo,sans-serif;font-weight:700;font-size:calc(2rem*var(--fs));line-height:1.5;padding:12px;word-break:break-word}
+#stage.flip{transform:rotate(180deg)}
+#stage .ph{color:var(--mut);font-size:1.1rem;font-weight:500}
+#stage .it{opacity:.6}
+.lbl{font-size:.8rem;color:var(--mut);margin-bottom:6px}
+#stream{display:grid;gap:10px;max-height:420px;overflow:auto;margin-top:12px}
+.msg{border:1px solid var(--bd);border-radius:14px;padding:10px 14px;font-size:calc(1.05rem*var(--fs))}
+.msg.speaker{border-inline-start:5px solid var(--pri)}
+.msg.writer{border-inline-start:5px solid var(--mut);background:color-mix(in srgb,var(--pri) 8%,transparent)}
+.msg small{color:var(--mut);display:block;font-size:.75rem}
+.msg .bar{margin-top:6px}.msg button{min-height:36px;font-size:.8rem;padding:2px 10px}
+textarea{width:100%;min-height:110px;padding:12px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);resize:vertical;font-size:1.1rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.chips button{border-radius:999px;font-size:.9rem}
+#banner,#toast{display:none}
+#banner.on{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+#toast{position:fixed;bottom:20px;inset-inline:20px;max-width:420px;margin-inline:auto;background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;text-align:center;z-index:30}
+#toast.on{display:block}
+#fs{display:none;position:fixed;inset:0;z-index:20;background:var(--bg);flex-direction:column;padding:20px}
+#fs.on{display:flex}
+#fs .txt{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-family:Cairo,sans-serif;font-weight:800;font-size:clamp(2.5rem,9vw,7rem);line-height:1.4;word-break:break-word}
+footer{text-align:center;color:var(--mut);font-size:.8rem;padding:16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>وصال</h1><p>تواصل واضح ومباشر لذوي الإعاقة السمعية — يعمل بالصوت والكتابة في اتجاهين</p></div>
+  <div class="bar" role="toolbar" aria-label="أدوات الإتاحة">
+    <button id="fsm" aria-label="تصغير الخط">أ−</button>
+    <button id="fsp" aria-label="تكبير الخط">أ+</button>
+    <select id="theme" aria-label="وضع العرض">
+      <option value="light">فاتح</option><option value="dark">داكن</option><option value="contrast">عالي التباين</option>
+    </select>
+    <select id="lang" aria-label="لغة الكلام">
+      <option value="ar-EG">عربي (مصري)</option><option value="ar-SA">عربي (فصحى)</option><option value="en-US">English</option>
+    </select>
+    <button id="flip" aria-pressed="false">قلب الشاشة</button>
+  </div>
+</header>
+
+<main>
+  <div class="card full" id="banner" role="region" aria-label="تأكيد بدء محادثة جديدة">
+    <span>هل تريد مسح سجل المحادثة الحالي والبدء من جديد؟</span>
+    <span class="bar"><button class="dang" id="yes">نعم، ابدأ محادثة جديدة</button><button id="no">إلغاء</button></span>
+  </div>
+
+  <section>
+    <div class="card" aria-live="polite">
+      <div class="lbl">ما يقوله المتحدث الآن</div>
+      <div id="stage"></div>
+      <div class="bar"><button id="stageFs">عرض بملء الشاشة</button></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="bar" style="justify-content:space-between">
+        <h2 style="font-size:1.1rem">سجل المحادثة</h2>
+        <span class="bar"><button id="copy">نسخ</button><button id="dl">تنزيل .txt</button><button class="dang" id="new">محادثة جديدة</button></span>
+      </div>
+      <div id="stream"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="lbl">للطرف السامع: تحدّث وسيظهر كلامك نصاً</div>
+    <button id="mic" class="pri" style="width:100%;font-size:1.1rem" aria-pressed="false">🎤 ابدأ الاستماع</button>
+    <div class="lbl" style="margin-top:16px"><label for="txt">للأصم: اكتب ما تريد قوله</label></div>
+    <textarea id="txt" placeholder="اكتب رسالتك هنا..."></textarea>
+    <div class="bar" style="margin-top:8px">
+      <button class="pri" id="send">إرسال</button>
+      <button id="sendSpeak">إرسال + نطق</button>
+      <button id="sendFs">إرسال + شاشة كاملة</button>
+    </div>
+    <div class="lbl" style="margin-top:16px">عبارات سريعة</div>
+    <div class="chips" id="chips"></div>
+  </section>
+</main>
+<footer>وصال — يعمل بالكامل داخل المتصفح. يُفضّل استخدام Chrome أو Edge للتحويل المباشر من الكلام إلى نص.</footer>
+
+<div id="fs" role="dialog" aria-modal="true" aria-label="عرض بملء الشاشة">
+  <div class="bar"><button id="fsSpeak">🔊 نطق</button><button class="dang" id="fsClose">إغلاق (Esc)</button></div>
+  <div class="txt" id="fsTxt"></div>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const load = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+
+const SCALES = [0.85, 1, 1.25, 1.6, 2];
+const PHRASES = ["مرحباً", "نعم", "لا", "شكراً لك", "من فضلك تحدّث ببطء", "من فضلك أعد ما قلت", "أنا أعاني من ضعف في السمع", "من فضلك اكتب لي", "أحتاج مساعدة"];
+const S = {
+  theme: load("wesal_theme_v1", "light"),
+  fi: load("wesal_font_scale_v1", 1),
+  lang: load("wesal_speech_lang_v1", "ar-EG"),
+  msgs: load("wesal_messages_v1", []),
+  flip: false, interim: "", fsText: ""
+};
+
+const timeNow = () => { try { return new Intl.DateTimeFormat("ar-EG", { hour: "2-digit", minute: "2-digit" }).format(new Date()); } catch { return new Date().toLocaleTimeString(); } };
+let tt; const toast = m => { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 3500); };
+
+/* ---------- apply settings ---------- */
+function applySettings() {
+  document.documentElement.dataset.theme = S.theme;
+  document.documentElement.style.setProperty("--fs", SCALES[S.fi]);
+  $("#theme").value = S.theme; $("#lang").value = S.lang;
+  $("#stage").classList.toggle("flip", S.flip);
+  $("#flip").setAttribute("aria-pressed", S.flip);
+  save("wesal_theme_v1", S.theme); save("wesal_font_scale_v1", S.fi); save("wesal_speech_lang_v1", S.lang);
+}
+
+/* ---------- messages ---------- */
+function addMsg(role, text, source) {
+  text = (text || "").trim(); if (!text) return;
+  S.msgs.push({ id: Date.now() + "-" + Math.random().toString(36).slice(2, 7), role, text, time: timeNow(), lang: S.lang, source });
+  save("wesal_messages_v1", S.msgs); $("#banner").classList.remove("on"); render();
+}
+function render() {
+  const stage = $("#stage"); stage.textContent = "";
+  const last = [...S.msgs].reverse().find(m => m.role === "speaker");
+  if (S.interim) { const s = document.createElement("span"); s.className = "it"; s.textContent = S.interim; stage.append(s); }
+  else if (last) stage.textContent = last.text;
+  else { const p = document.createElement("span"); p.className = "ph"; p.textContent = "اضغط «ابدأ الاستماع» وسيظهر الكلام هنا نصاً كبيراً وواضحاً"; stage.append(p); }
+
+  const box = $("#stream"); box.textContent = "";
+  if (!S.msgs.length) { const e = document.createElement("p"); e.style.color = "var(--mut)"; e.textContent = "لا توجد رسائل بعد."; box.append(e); }
+  S.msgs.forEach(m => {
+    const d = document.createElement("div"); d.className = "msg " + m.role;
+    const sm = document.createElement("small"); sm.textContent = (m.role === "speaker" ? "المتحدث (صوت)" : "أنت (كتابة)") + " • " + m.time;
+    const p = document.createElement("div"); p.textContent = m.text;
+    const b = document.createElement("div"); b.className = "bar";
+    const mk = (t, f, c) => { const x = document.createElement("button"); x.textContent = t; if (c) x.className = c; x.onclick = f; b.append(x); };
+    mk("🔊 نطق", () => speak(m.text, m.lang)); mk("شاشة كاملة", () => openFs(m.text)); mk("حذف", () => { S.msgs = S.msgs.filter(z => z.id !== m.id); save("wesal_messages_v1", S.msgs); render(); }, "dang");
+    d.append(sm, p, b); box.append(d);
+  });
+  box.scrollTop = box.scrollHeight;
+}
+
+/* ---------- speech to text (browser Web Speech API) ---------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null, listening = false;
+function updateMic() {
+  const b = $("#mic"); b.classList.toggle("live", listening); b.classList.toggle("pri", !listening);
+  b.textContent = listening ? "⏹ إيقاف الاستماع (جارٍ الاستماع...)" : "🎤 ابدأ الاستماع"; b.setAttribute("aria-pressed", listening);
+}
+function startLive() {
+  if (!SR) return toast("هذا المتصفح لا يدعم التحويل المباشر. استخدم Chrome أو Edge.");
+  rec = new SR(); rec.lang = S.lang; rec.continuous = true; rec.interimResults = true;
+  rec.onresult = e => {
+    let it = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const r = e.results[i];
+      if (r.isFinal) addMsg("speaker", r[0].transcript, "live"); else it += r[0].transcript;
+    }
+    S.interim = it; render();
+  };
+  rec.onerror = e => {
+    if (e.error === "not-allowed" || e.error === "service-not-allowed") { listening = false; toast("اسمح للموقع باستخدام الميكروفون. وإن كنت تفتح الملف مباشرة، شغّله عبر localhost أو استضافة https."); }
+    else if (e.error === "network") toast("التحويل المباشر يحتاج اتصالاً بالإنترنت.");
+  };
+  rec.onend = () => { if (listening) { try { rec.start(); } catch {} } else { S.interim = ""; render(); updateMic(); } };
+  listening = true; try { rec.start(); } catch {} updateMic();
+}
+function stopLive() { listening = false; if (rec) rec.stop(); S.interim = ""; updateMic(); render(); }
+
+/* ---------- text to speech (browser) ---------- */
+function speak(text, lang) {
+  if (!("speechSynthesis" in window)) return toast("هذا المتصفح لا يدعم النطق الصوتي.");
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text); u.lang = lang || S.lang;
+  const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(u.lang.slice(0, 2).toLowerCase()));
+  if (v) u.voice = v; else if (u.lang.startsWith("ar")) toast("لا يوجد صوت عربي مثبت على جهازك، قد لا يُسمع النطق.");
+  speechSynthesis.speak(u);
+}
+
+/* ---------- fullscreen display ---------- */
+function openFs(text) { S.fsText = text; $("#fsTxt").textContent = text; $("#fs").classList.add("on"); $("#fsClose").focus(); }
+function closeFs() { speechSynthesis && speechSynthesis.cancel(); $("#fs").classList.remove("on"); }
+
+/* ---------- send as writer ---------- */
+function sendWriter({ speakIt, fullscreen, text, quick } = {}) {
+  const t = (text ?? $("#txt").value).trim(); if (!t) return;
+  addMsg("writer", t, quick ? "quick-phrase" : "typed");
+  if (!quick) $("#txt").value = "";
+  if (speakIt) speak(t); if (fullscreen) openFs(t);
+}
+
+/* ---------- transcript ---------- */
+const transcript = sep => S.msgs.map(m => `[${m.time}] ${m.role === "speaker" ? "المتحدث" : "أنت (كتابة)"}: ${m.text}`).join(sep);
+
+/* ---------- wiring ---------- */
+PHRASES.forEach(p => { const b = document.createElement("button"); b.textContent = p; b.onclick = () => sendWriter({ text: p, quick: true, speakIt: true }); $("#chips").append(b); });
+$("#mic").onclick = () => listening ? stopLive() : startLive();
+$("#send").onclick = () => sendWriter();
+$("#sendSpeak").onclick = () => sendWriter({ speakIt: true });
+$("#sendFs").onclick = () => sendWriter({ fullscreen: true });
+$("#txt").addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) sendWriter(); });
+$("#stageFs").onclick = () => { const l = [...S.msgs].reverse().find(m => m.role === "speaker"); const t = S.interim || (l && l.text); t ? openFs(t) : toast("لا يوجد كلام لعرضه بعد."); };
+$("#fsSpeak").onclick = () => speak(S.fsText); $("#fsClose").onclick = closeFs;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeFs(); });
+$("#fsm").onclick = () => { S.fi = Math.max(0, S.fi - 1); applySettings(); };
+$("#fsp").onclick = () => { S.fi = Math.min(SCALES.length - 1, S.fi + 1); applySettings(); };
+$("#theme").onchange = e => { S.theme = e.target.value; applySettings(); };
+$("#lang").onchange = e => { S.lang = e.target.value; applySettings(); if (listening) { stopLive(); setTimeout(startLive, 300); } };
+$("#flip").onclick = () => { S.flip = !S.flip; applySettings(); };
+$("#copy").onclick = async () => { if (!S.msgs.length) return; try { await navigator.clipboard.writeText(transcript("\n")); toast("تم نسخ المحادثة"); } catch { toast("تعذر النسخ"); } };
+$("#dl").onclick = () => {
+  if (!S.msgs.length) return;
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([transcript("\n\n")], { type: "text/plain;charset=utf-8" }));
+  a.download = "wesal-conversation-" + new Date().toISOString().slice(0, 10) + ".txt"; document.body.append(a); a.click(); a.remove(); URL.revokeObjectURL(a.href);
+};
+$("#new").onclick = () => { if (S.msgs.length) $("#banner").classList.add("on"); };
+$("#no").onclick = () => $("#banner").classList.remove("on");
+$("#yes").onclick = () => { speechSynthesis && speechSynthesis.cancel(); S.msgs = []; save("wesal_messages_v1", S.msgs); $("#banner").classList.remove("on"); render(); };
+
+applySettings(); render(); updateMic();
+</script>
+</body>
 </html>
