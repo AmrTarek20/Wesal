@@ -1,0 +1,6 @@
+{
+  "name": "وصال — جسر التواصل الفوري للصم وضعاف السمع",
+  "description": "منصة تواصل ثنائية الاتجاه تحوّل الكلام المنطوق إلى نص فوري واضح لذوي الإعاقة السمعية، وتتيح لهم الكتابة والعرض بخط كبير أو النطق الصوتي ليتواصل الجميع بسهولة.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
